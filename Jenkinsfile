@@ -15,7 +15,7 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                    sh 'docker build -t uditmishra/react-app:v4 .'
+                    sh 'docker build -t uditmishra/react-app:v1 .'
                 }
             }
         }
@@ -40,5 +40,10 @@ pipeline {
         //         sh 'kubectl apply -f service.yaml'
         //     }
         // }
+    }
+    post {
+        always {
+            cleanWs()  // Cleans the workspace after job completion
+        }
     }
 }
