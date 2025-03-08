@@ -1,9 +1,9 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_DEFAULT_REGION = "us-east-1"
-    }
+    // environment {
+    //     AWS_DEFAULT_REGION = "us-east-1"
+    // }
 
     stages {
         stage('Checkout Source') {
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'docker push uditmishra/react-app:v4'
+                sh 'docker push uditmishra/react-app:v1'
             }
         }
 
