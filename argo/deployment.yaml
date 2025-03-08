@@ -20,3 +20,19 @@ spec:
         imagePullPolicy: Always # Ensure Kubernetes pulls the latest image from Docker Hub
         ports:
         - containerPort: 3000 # Port exposed by the container
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-app-service
+spec:
+  selector:
+    app: react-app
+  ports:
+    - protocol: TCP
+      port: 80       # Exposed service port
+      targetPort: 3000 # Matches the container port
+      nodePort: 30080  # External port (only for NodePort type)
+  type: NodePort
+
