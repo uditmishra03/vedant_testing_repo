@@ -1,9 +1,10 @@
 pipeline {
     agent any
 
-    // environment {
-    //     AWS_DEFAULT_REGION = "us-east-1"
-    // }
+    environment {
+        IMAGE_NAME = "uditmishra/react-app"
+        IMAGE_TAG = "${BUILD_NUMBER}" // Use Jenkins BUILD_NUMBER as the image tag
+    }
 
     stages {
         stage('Checkout Source') {
@@ -15,7 +16,7 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                    sh 'docker build -t uditmishra/react-app:v1 .'
+                    sh "docker build -t  ${IMAGE_NAME}:${IMAGE_TAG} ."
                 }
             }
         }
@@ -29,17 +30,38 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'docker push uditmishra/react-app:v1'
+                sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
             }
         }
 
-        // stage('Deploy to EKS') {
-        //     steps {
-        //         sh 'kubectl config use-context arn:aws:eks:us-east-1:266735832911:cluster/jenkinsProject'
-        //         sh 'kubectl apply -f deployment.yaml'
-        //         sh 'kubectl apply -f service.yaml'
-        //     }
-        // }
+        stage('Update Deployment YAML') {
+            steps {
+                script {
+                    sh """
+                    sed -i 's|image: uditmishra/react-app:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|' argo/deployment.yaml
+                    """
+                }
+            }
+        }
+
+        stage('Commit & Push Changes') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'github-credentials', keyFileVariable: 'SSH_KEY')]) {
+                        sh """
+                        eval `ssh-agent -s`
+                        ssh-add $SSH_KEY
+                        git config --global user.email "jenkins@yourdomain.com"
+                        git config --global user.name "Jenkins CI"
+                        git add argo/deployment.yaml
+                        git commit -m "Update deployment image to ${IMAGE_NAME}:${IMAGE_TAG}"
+                        git push origin ${GIT_BRANCH}
+                        """
+                    }
+                }
+            }
+        }
+
     }
     post {
         always {

@@ -15,7 +15,8 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React V4!! Yay
+          Learn React V3!! Yay
+          This soon be get deployed to our cluster...
         </a>
       </header>
     </div>
