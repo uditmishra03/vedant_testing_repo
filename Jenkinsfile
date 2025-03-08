@@ -8,14 +8,14 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                git branch: 'e2e_project', url: 'https://github.com/vedantsharmascaler/testing_repo.git'
+                git branch: 'argo', url: 'https://github.com/uditmishra03/vedant_testing_repo.git'
             }
         }
 
         stage('Build Image') {
             steps {
                 script {
-                    sh 'docker build -t vedant120/react-app:v4 .'
+                    sh 'docker build -t uditmishra/react-app:v4 .'
                 }
             }
         }
@@ -29,16 +29,16 @@ pipeline {
 
         stage('Push') {
             steps {
-                sh 'docker push vedant120/react-app:v4'
+                sh 'docker push uditmishra/react-app:v4'
             }
         }
 
-        stage('Deploy to EKS') {
-            steps {
-                sh 'kubectl config use-context arn:aws:eks:us-east-1:266735832911:cluster/jenkinsProject'
-                sh 'kubectl apply -f deployment.yaml'
-                sh 'kubectl apply -f service.yaml'
-            }
+        // stage('Deploy to EKS') {
+        //     steps {
+        //         sh 'kubectl config use-context arn:aws:eks:us-east-1:266735832911:cluster/jenkinsProject'
+        //         sh 'kubectl apply -f deployment.yaml'
+        //         sh 'kubectl apply -f service.yaml'
+        //     }
         }
     }
 }
