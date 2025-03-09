@@ -40,34 +40,23 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
+        stage('Build, Push and Clean Up Image') {
             steps {
-                script {
-                    sh "docker build -t  ${IMAGE_NAME}:${IMAGE_TAG} ."
-                }
-            }
-        }
-        stage('Docker Login') {
-            steps {
+            script {
+                // Build the Docker image
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                
+                // Login to DockerHub
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
+                sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
                 }
-            }
-        }
-
-        stage('Push') {
-            steps {
+                
+                // Push the Docker image
                 sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                
+                // Clean up the Docker image
+                sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true"  // '|| true' avoids failure if the image is not found
             }
-        }
-
-        // New Stage: Clean Up Docker Image After Push
-        stage('Clean Up Docker Image') {
-            steps {
-                script {
-                    // Remove the locally stored image to free up memory
-                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true"  // '|| true' avoids failure if the image is not found
-                }
             }
         }
 
