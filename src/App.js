@@ -19,7 +19,7 @@ function App() {
           <br />
           {/* This soon be get deployed to our cluster... */}
           <br />
-          Image: uditmishra/react-app:2025-03-09_19-48-03
+          Image: uditmishra/react-app:2025-03-09_20-03-42
         </a>
         
       </header>
