@@ -19,7 +19,7 @@ function App() {
           <br />
           This soon be get deployed to our cluster...
         </a>
-        <p>Image: uditmishra/react-app:2025-03-09_19-22-18
+        <p>Image: uditmishra/react-app:2025-03-09_19-28-52
       </header>
     </div>
   );
