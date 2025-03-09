@@ -81,7 +81,7 @@ pipeline {
                         git config --global user.email "jenkins@yourdomain.com"
                         git config --global user.name "Jenkins CI"
                         git add argo/deployment.yaml src/App.js
-                        git commit -m "Update deployment image and App.js to ${IMAGE_NAME}:${IMAGE_TAG}"
+                        git commit -m "Update deployment image and App.js to ${IMAGE_NAME}:${IMAGE_TAG} [ci skip]"
                         git push ${GIT_REPO_URL} argo
                         """
                     }
