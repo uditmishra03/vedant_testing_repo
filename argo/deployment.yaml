@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: react-app # Name of the container
-        image: uditmishra/react-app:2025-03-09_19-34-13
+        image: uditmishra/react-app:2025-03-09_19-48-03
         imagePullPolicy: Always # Ensure Kubernetes pulls the latest image from Docker Hub
         ports:
         - containerPort: 3000 # Port exposed by the container
