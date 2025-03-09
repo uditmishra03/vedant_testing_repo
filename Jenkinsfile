@@ -10,9 +10,18 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                git branch: 'argo', url: GIT_REPO_URL
+                script {
+                    def changeAuthor = sh(script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+                    if (changeAuthor == "Jenkins CI") {
+                        echo "Skipping build because Jenkins committed this change."
+                        currentBuild.result = 'ABORTED'
+                        error("Build stopped to prevent infinite loop.")
+                    }
+                    git branch: 'argo', url: GIT_REPO_URL
+                }
             }
         }
+
 
         stage('Build Image') {
             steps {
