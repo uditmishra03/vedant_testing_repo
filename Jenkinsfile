@@ -29,7 +29,16 @@ pipeline {
                 }
             }
         }
-
+        
+        stage('Update App.js with New Image') {
+            steps {
+                script {
+                    sh """
+                    sed -i 's|Image: uditmishra/react-app:.*|Image: uditmishra/react-app:${IMAGE_TAG}|' src/App.js
+                    """
+                }
+            }
+        }
 
         stage('Build Image') {
             steps {
@@ -72,16 +81,7 @@ pipeline {
             }
         }
 
-        stage('Update App.js with New Image') {
-            steps {
-                script {
-                    sh """
-                    sed -i 's|Image: uditmishra/react-app:.*|Image: uditmishra/react-app:${IMAGE_TAG}|' src/App.js
-                    """
-                }
-            }
-        }
-
+        
         stage('Commit & Push Changes') {
             steps {
                 script {
