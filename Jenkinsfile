@@ -16,7 +16,7 @@ pipeline {
                     echo "Build Timestamp: ${BUILD_TIMESTAMP}"
                 }
             }
-        }
+        
         stage('Checkout Source') {
             steps {
                 script {
