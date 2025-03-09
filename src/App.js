@@ -15,9 +15,11 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React V3!! Yay
+          Learn React V3!! Yay 
+          <br />
           This soon be get deployed to our cluster...
         </a>
+        <p>Image: uditmishra/react-app:75</p>
       </header>
     </div>
   );
