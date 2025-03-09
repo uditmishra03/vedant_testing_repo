@@ -10,7 +10,6 @@ pipeline {
 
     stages {
 
-        stages {
         stage('Print Timestamp') {
                 steps {
                     echo "Build Timestamp: ${BUILD_TIMESTAMP}"
