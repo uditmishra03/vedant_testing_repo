@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "uditmishra/react-app"
-        IMAGE_TAG = "${BUILD_NUMBER}" // Use Jenkins BUILD_NUMBER as the image tag
+        IMAGE_TAG = "${BUILD_ID}" // Use Jenkins BUILD_NUMBER as the image tag
         GIT_REPO_URL = 'git@github.com:uditmishra03/vedant_testing_repo.git'  // Git repo URL
     }
 
