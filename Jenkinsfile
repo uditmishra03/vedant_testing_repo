@@ -3,11 +3,20 @@ pipeline {
 
     environment {
         IMAGE_NAME = "uditmishra/react-app"
-        IMAGE_TAG = "${BUILD_ID}" // Use Jenkins BUILD_NUMBER as the image tag
+        BUILD_TIMESTAMP = sh(script: "date +%Y-%m-%d_%H-%M-%S", returnStdout: true).trim()
+        IMAGE_TAG = "${BUILD_TIMESTAMP}" // Use Jenkins BUILD_NUMBER as the image tag
         GIT_REPO_URL = 'git@github.com:uditmishra03/vedant_testing_repo.git'  // Git repo URL
     }
 
     stages {
+
+        stages {
+        stage('Print Timestamp') {
+                steps {
+                    echo "Build Timestamp: ${BUILD_TIMESTAMP}"
+                }
+            }
+        }
         stage('Checkout Source') {
             steps {
                 script {
@@ -64,6 +73,16 @@ pipeline {
             }
         }
 
+        stage('Update App.js with New Image') {
+            steps {
+                script {
+                    sh """
+                    sed -i 's|Image: uditmishra/react-app:.*|Image: uditmishra/react-app:${IMAGE_TAG}|' src/App.js
+                    """
+                }
+            }
+        }
+
         stage('Commit & Push Changes') {
             steps {
                 script {
@@ -73,8 +92,8 @@ pipeline {
                         ssh-add \$SSH_KEY
                         git config --global user.email "jenkins@yourdomain.com"
                         git config --global user.name "Jenkins CI"
-                        git add argo/deployment.yaml
-                        git commit -m "Update deployment image to ${IMAGE_NAME}:${IMAGE_TAG}"
+                        git add argo/deployment.yaml src/App.js
+                        git commit -m "Update deployment image and App.js to ${IMAGE_NAME}:${IMAGE_TAG}"
                         git push ${GIT_REPO_URL} argo
                         """
                     }
