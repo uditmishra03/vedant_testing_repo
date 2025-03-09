@@ -6,6 +6,7 @@ metadata:
     app: react-app
 spec:
   replicas: 1 # The number of pods to be created
+  revisionHistoryLimit: 5
   selector:
     matchLabels:
       app: react-app
@@ -27,6 +28,7 @@ kind: Service
 metadata:
   name: react-app-service
 spec:
+
   selector:
     app: react-app
   ports:
